@@ -7,7 +7,7 @@ export default function QrisPayment() {
     return <p>Loading transaction details...</p>;
   }
 
-  const paymentLink = `http://localhost:5000/paying/${transactionDetails._id}`;
+  const paymentLink = `http://3.80.235.113:5000/paying/${transactionDetails._id}`;
 
   return (
     <div className="container mx-auto px-4 py-8 text-center">
