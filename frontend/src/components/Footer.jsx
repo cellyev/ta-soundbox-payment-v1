@@ -45,8 +45,8 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold text-lg mb-4">Contact</h4>
-            <p className="text-sm mb-2">Email: vailovent@gmail.com</p>
-            <p className="text-sm">Phone: +62 899 0093 005</p>
+            <p className="text-sm mb-2">Email: {import.meta.env.EMAIL_USER}</p>
+            <p className="text-sm">Phone: {import.meta.env.PHONE_NUMBER}</p>
           </div>
         </div>
 

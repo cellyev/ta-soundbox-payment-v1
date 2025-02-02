@@ -26,7 +26,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <img
-            src="https://ta-project-soundbox-payment.s3.ap-southeast-2.amazonaws.com/v-logo.jpg"
+            src={import.meta.env.LOGO_IMAGE_URL}
             alt="Logo"
             className="w-10 h-10"
           />
