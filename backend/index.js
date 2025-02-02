@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(CORS({ origin: "http://3.80.235.113:8000", credentials: true }));
+app.use(CORS({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
 
 app.use("/api/product", productRoute);
 app.use("/api/transaction", transactionRoute);

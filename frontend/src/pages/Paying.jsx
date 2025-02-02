@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Impor gaya toast
 
 const Paying = () => {
-  const { transaction_id } = useParams(); // Ambil transaction_id dari URL
+  const { transaction_id } = useParams();
   const navigate = useNavigate();
   const { paying, setTransactionDetails, isLoading, error } =
     useTransactionStore();
 
-  const [amount, setAmount] = useState("");
+  const [amountFormatted, setAmountFormatted] = useState(""); // Untuk tampilan
+  const [amountRaw, setAmountRaw] = useState(0); // Untuk dikirim ke API
 
   useEffect(() => {
     const fetchTransactionDetails = async () => {
@@ -21,18 +22,19 @@ const Paying = () => {
         const data = await response.json();
 
         if (!data.success) {
-          toast.error(data.message); // Tampilkan notifikasi error
+          toast.error(data.message);
           return navigate("/");
         }
 
-        // Simpan detail transaksi di store
         setTransactionDetails(data.data);
 
-        // Format amount dengan titik pemisah ribuan
-        setAmount(data.data.total_amount.toLocaleString("id-ID"));
+        // Simpan nilai asli (tanpa titik) dan format untuk tampilan
+        const amountValue = data.data.total_amount;
+        setAmountRaw(amountValue); // Simpan angka asli
+        setAmountFormatted(amountValue.toLocaleString("id-ID")); // Format untuk tampilan
       } catch (err) {
         console.error(err);
-        toast.error("Error fetching transaction details"); // Tampilkan error
+        toast.error("Error fetching transaction details");
       }
     };
 
@@ -41,19 +43,16 @@ const Paying = () => {
 
   const handlePayment = async () => {
     try {
-      // Hilangkan titik sebelum dikonversi ke angka
-      const numericAmount = parseFloat(amount.replace(/\./g, ""));
-      if (isNaN(numericAmount)) {
+      if (isNaN(amountRaw) || amountRaw <= 0) {
         toast.error("Amount must be a valid number!");
         return;
       }
 
-      const response = await paying(transaction_id, numericAmount);
+      const response = await paying(transaction_id, amountRaw); // Kirim angka asli
 
       if (response && response.data) {
-        const { items, success, message } = response.data;
+        const { items, success } = response.data;
 
-        // Cek apakah items ada dan valid
         console.log("Items from response:", items);
 
         if (success && Array.isArray(items) && items.length > 0) {
@@ -63,7 +62,7 @@ const Paying = () => {
             state: {
               status: "Success",
               transaction_id,
-              amount,
+              amount: amountRaw, // Kirim angka asli ke halaman sukses
               items,
             },
           });
@@ -89,8 +88,8 @@ const Paying = () => {
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Amount</label>
             <input
-              type="text" // Ubah dari type="number" ke type="text" agar format tetap
-              value={amount}
+              type="text"
+              value={amountFormatted} // Tampilkan angka terformat
               readOnly
               className="w-full p-2 border rounded"
             />

@@ -7,13 +7,16 @@ const {
   payingValidator,
   createTransactionValidator,
 } = require("../middlewares/transactionValidator");
-const { sendSuccessEmail } = require("../middlewares/sendMail");
+const {
+  sendSuccessEmail,
+  sendPaymentEmail,
+} = require("../middlewares/sendMail");
 
 const { generateQRCode } = require("../utils/qrCodeGenerator");
 const QRCode = require("../models/qrCodeSchema");
 const { findTransactionById } = require("../utils/findTransaction");
 
-const PAYMENT_URL = `${process.env.PUBLIC_URL}/paying`;
+const PAYMENT_URL = `${process.env.CLIENT_URL}/paying`;
 
 exports.createTransaction = async (req, res) => {
   const { table_code, customer_name, customer_email, products } = req.body;
@@ -96,6 +99,12 @@ exports.createTransaction = async (req, res) => {
       qr_code: qrCode,
     });
     await qrCodeEntry.save();
+
+    await sendPaymentEmail(
+      existingTransaction.customer_email,
+      existingTransaction,
+      items
+    );
 
     res.status(201).json({
       success: true,
