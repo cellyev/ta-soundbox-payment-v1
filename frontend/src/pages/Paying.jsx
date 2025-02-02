@@ -17,7 +17,7 @@ const Paying = () => {
     const fetchTransactionDetails = async () => {
       try {
         const response = await fetch(
-          `http://3.80.235.113:5000/api/transaction/get-by-id/${transaction_id}`
+          `http://3.80.235.113:8000/api/transaction/get-by-id/${transaction_id}`
         );
         const data = await response.json();
 
