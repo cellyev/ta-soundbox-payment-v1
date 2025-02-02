@@ -47,7 +47,7 @@ exports.sendSuccessEmail = async (customer_email, transaction, items) => {
           <!-- Header Section -->
           <div style="text-align: center; padding-bottom: 10px;">
             <img src="${
-              process.env.LOGO_IMAGE_URL
+              process.env.VITE_LOGO_IMAGE_URL
             }" alt="Valtechnos Logo" style="max-width: 100px;">
             <h2 style="color: #4CAF50; font-size: 28px;">Transaction Completed!</h2>
           </div>

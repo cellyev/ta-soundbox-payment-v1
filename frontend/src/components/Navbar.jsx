@@ -26,7 +26,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <img
-            src={import.meta.env.LOGO_IMAGE_URL}
+            src={import.meta.env.VITE_LOGO_IMAGE_URL}
             alt="Logo"
             className="w-10 h-10"
           />
