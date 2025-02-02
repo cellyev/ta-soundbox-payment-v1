@@ -100,10 +100,11 @@ exports.createTransaction = async (req, res) => {
     });
     await qrCodeEntry.save();
 
+    // Kirim email pembayaran
     await sendPaymentEmail(
-      existingTransaction.customer_email,
-      existingTransaction,
-      items
+      savedTransaction.customer_email,
+      savedTransaction,
+      updatedTransactionItems
     );
 
     res.status(201).json({
