@@ -14,9 +14,9 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold text-center mb-10">
+      {/* <h1 className="text-4xl font-bold text-center mb-10">
         Welcome to Vailovent!
-      </h1>
+      </h1> */}
       <div className="grid grid-cols-1 gap-6">
         {products.length === 0 ? (
           <div>No products available!</div>

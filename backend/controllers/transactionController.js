@@ -7,13 +7,13 @@ const {
   payingValidator,
   createTransactionValidator,
 } = require("../middlewares/transactionValidator");
-const { sendVerificationEmail } = require("../middlewares/sendMail");
+const { sendSuccessEmail } = require("../middlewares/sendMail");
 
 const { generateQRCode } = require("../utils/qrCodeGenerator");
 const QRCode = require("../models/qrCodeSchema");
 const { findTransactionById } = require("../utils/findTransaction");
 
-const PAYMENT_URL = `${process.env.CLIENT_URL}/paying`;
+const PAYMENT_URL = `${process.env.PUBLIC_URL}/paying`;
 
 exports.createTransaction = async (req, res) => {
   const { table_code, customer_name, customer_email, products } = req.body;
@@ -42,8 +42,7 @@ exports.createTransaction = async (req, res) => {
       if (isTransactionInProgress) {
         return res.status(400).json({
           success: false,
-          message:
-            "A transaction is already in progress for this table. Please complete the current transaction before starting a new one.",
+          message: "A transaction is already in progress for this table!",
         });
       }
     }
@@ -177,7 +176,7 @@ exports.paying = async (req, res) => {
       transaction_id: transaction_id,
     });
 
-    await sendVerificationEmail(
+    await sendSuccessEmail(
       existingTransaction.customer_email,
       existingTransaction,
       items

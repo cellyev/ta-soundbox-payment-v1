@@ -28,8 +28,8 @@ const Paying = () => {
         // Simpan detail transaksi di store
         setTransactionDetails(data.data);
 
-        // Isi otomatis kolom amount dari total amount di database
-        setAmount(data.data.total_amount);
+        // Format amount dengan titik pemisah ribuan
+        setAmount(data.data.total_amount.toLocaleString("id-ID"));
       } catch (err) {
         console.error(err);
         toast.error("Error fetching transaction details"); // Tampilkan error
@@ -41,16 +41,14 @@ const Paying = () => {
 
   const handlePayment = async () => {
     try {
-      const numericAmount = parseFloat(amount);
+      // Hilangkan titik sebelum dikonversi ke angka
+      const numericAmount = parseFloat(amount.replace(/\./g, ""));
       if (isNaN(numericAmount)) {
         toast.error("Amount must be a valid number!");
         return;
       }
 
       const response = await paying(transaction_id, numericAmount);
-
-      // Cek response data
-      console.log("Response from API:", response); // Debugging: cek response
 
       if (response && response.data) {
         const { items, success, message } = response.data;
@@ -91,7 +89,7 @@ const Paying = () => {
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Amount</label>
             <input
-              type="number"
+              type="text" // Ubah dari type="number" ke type="text" agar format tetap
               value={amount}
               readOnly
               className="w-full p-2 border rounded"

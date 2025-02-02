@@ -12,6 +12,12 @@ export default function Navbar() {
     setMenuOpen(!menuOpen);
   };
 
+  // Fungsi untuk menutup menu dan scroll ke atas
+  const handleNavClick = () => {
+    setMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
+
   // Get the cart count
   const cartCount = cart.length;
 
@@ -80,6 +86,7 @@ export default function Navbar() {
           <Link
             to="/home"
             className="block px-6 py-2 text-gray-700 hover:text-blue-500"
+            onClick={handleNavClick}
           >
             <FaHome />
             <span>Home</span>
@@ -88,6 +95,7 @@ export default function Navbar() {
           <Link
             to="/cart"
             className="block px-6 py-2 text-gray-700 hover:text-blue-500"
+            onClick={handleNavClick}
           >
             <FaShoppingCart />
             <span>Cart</span>
@@ -101,6 +109,7 @@ export default function Navbar() {
           <Link
             to="/payment"
             className="block px-6 py-2 text-gray-700 hover:text-blue-500"
+            onClick={handleNavClick}
           >
             <FaCreditCard />
             <span>Payment</span>
