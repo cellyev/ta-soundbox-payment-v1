@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://3.80.235.113:6000/api/product";
+const API_URL = "http://3.80.235.113:8000/api/product";
 
 // Menggunakan default axios tanpa withCredentials karena tidak ada autentikasi
 export const useProductStore = create((set) => ({
