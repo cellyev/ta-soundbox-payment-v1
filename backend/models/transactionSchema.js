@@ -46,7 +46,14 @@ const transactionSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["pending", "completed", "cancelled"],
+      enum: [
+        "pending",
+        "completed",
+        "cancelled",
+        "expired",
+        "denied",
+        "challengebyFDS",
+      ],
       default: "pending",
     },
     isRead: {
@@ -57,7 +64,6 @@ const transactionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Pre-save hook to capitalize customer name
 transactionSchema.pre("save", function (next) {
   if (this.customer_name && this.customer_name.length > 0) {
     this.customer_name = this.customer_name

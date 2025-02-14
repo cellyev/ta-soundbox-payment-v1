@@ -5,6 +5,8 @@ const CORS = require("cors");
 const { connectToDB } = require("./db/connectToDB");
 const productRoute = require("./routes/productRoute");
 const transactionRoute = require("./routes/transactionRoute");
+const termsAndConditionsRoute = require("./routes/termsAndConditionsRoute");
+const midtransRoute = require("./routes/midtransRoute");
 const path = require("path");
 
 dotenv.config();
@@ -12,10 +14,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(CORS({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
+app.use(CORS({ origin: `${process.env.FRONTEND_URL}`, credentials: true }));
 
 app.use("/api/product", productRoute);
 app.use("/api/transaction", transactionRoute);
+app.use("/api/termsAndConditions", termsAndConditionsRoute);
+app.use("/api/midtrans", midtransRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

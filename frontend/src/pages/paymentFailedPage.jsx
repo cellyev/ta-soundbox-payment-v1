@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const PaymentSuccessPage = () => {
+const PaymentFailedPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,7 +26,6 @@ const PaymentSuccessPage = () => {
 
   // console.log("Raw items:", items);
 
-  // **Pastikan items selalu berbentuk array**
   let itemsArray = [];
 
   if (Array.isArray(items)) {
@@ -41,25 +40,25 @@ const PaymentSuccessPage = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        Payment Successful
+      <h1 className="text-3xl font-bold text-center mb-6 text-red-600">
+        Payment Failed
       </h1>
       <div className="mb-4">
-        <p className="text-green-600 font-semibold text-lg mb-2">
+        <p className="text-red-600 font-semibold text-lg mb-2">
           Status: {status}
         </p>
         <p className="text-sm text-gray-600">
           Transaction ID: <span className="font-medium">{transaction_id}</span>
         </p>
         <p className="text-sm text-gray-600">
-          Amount Paid:{" "}
+          Amount Attempted:{" "}
           <span className="font-medium">
             Rp {parseFloat(amount).toLocaleString()}
           </span>
         </p>
       </div>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">Items Purchased</h2>
+      <h2 className="text-2xl font-semibold mt-6 mb-4">Items Attempted</h2>
       <table className="min-w-full table-auto border-collapse mb-6">
         <thead className="bg-gray-100">
           <tr>
@@ -99,15 +98,15 @@ const PaymentSuccessPage = () => {
       </table>
 
       <div className="flex justify-between items-center mt-4">
-        <p className="text-lg font-bold">Total Amount:</p>
-        <p className="text-lg font-medium text-blue-600">
+        <p className="text-lg font-bold">Total Attempted:</p>
+        <p className="text-lg font-medium text-red-600">
           Rp {amount ? parseFloat(amount).toLocaleString() : "N/A"}
         </p>
       </div>
 
       <button
         onClick={() => navigate("/")}
-        className="w-full mt-6 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+        className="w-full mt-6 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition"
       >
         Go to Home
       </button>
@@ -115,4 +114,4 @@ const PaymentSuccessPage = () => {
   );
 };
 
-export default PaymentSuccessPage;
+export default PaymentFailedPage;

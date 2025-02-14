@@ -1,21 +1,20 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "../pages/HomePage";
-import Cart from "../pages/Cart";
-import QrisPayment from "../pages/QrisPayment";
-import Paying from "../pages/Paying";
+import HomePage from "../pages/HomePage";
+import CartPage from "../pages/CartPage";
+// import QrisPaymentPage from "../pages/QrisPaymentPage";
+// import PayingPage from "../pages/PayingPage";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
-// import Payment from "../pages/Payment";
+import PaymentFailedPage from "../pages/paymentFailedPage";
 
-export default function Router() {
+export default function RouterComponent() {
   return (
     <Routes>
-      <Route path="/home" element={<Home />} />
-      <Route path="/cart" element={<Cart />} />
-      {/* <Route path="/payment" element={"<Payment />"} /> */}
-      <Route path="/qris-payment" element={<QrisPayment />} />
-      <Route path="/paying/:transaction_id" element={<Paying />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/cart" element={<CartPage />} />
+      {/* <Route path="/qris-payment" element={<QrisPaymentPage />} /> */}
+      {/* <Route path="/paying/:transaction_id/:status" element={<PayingPage />} /> */}
       <Route path="/payment-success" element={<PaymentSuccessPage />} />
-
+      <Route path="/payment-failed" element={<PaymentFailedPage />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );

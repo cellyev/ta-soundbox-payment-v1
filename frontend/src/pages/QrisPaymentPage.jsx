@@ -1,13 +1,13 @@
 import { useTransactionStore } from "../store/transactionStore";
 
-export default function QrisPayment() {
+export default function QrisPaymentPage() {
   const { transactionDetails, qrCode } = useTransactionStore();
 
   if (!transactionDetails || !qrCode) {
     return <p>Loading transaction details...</p>;
   }
 
-  const paymentLink = `http://3.80.235.113:8000/paying/${transactionDetails._id}`;
+  const paymentLink = `http://localhost:5173/paying/${transactionDetails._id}`;
 
   return (
     <div className="container mx-auto px-4 py-8 text-center">

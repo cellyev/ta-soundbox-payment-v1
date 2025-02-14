@@ -2,36 +2,32 @@ import { useEffect, useState } from "react";
 import { useTransactionStore } from "../store/transactionStore";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Impor gaya toast
+import "react-toastify/dist/ReactToastify.css";
 
-const Paying = () => {
+export default function PayingPage() {
   const { transaction_id } = useParams();
   const navigate = useNavigate();
-  const { paying, setTransactionDetails, isLoading, error } =
+  const { paying, setTransactionDetails, fetchTransaction, isLoading, error } =
     useTransactionStore();
 
-  const [amountFormatted, setAmountFormatted] = useState(""); // Untuk tampilan
-  const [amountRaw, setAmountRaw] = useState(0); // Untuk dikirim ke API
+  const [amountFormatted, setAmountFormatted] = useState("");
+  const [amountRaw, setAmountRaw] = useState(0);
 
   useEffect(() => {
     const fetchTransactionDetails = async () => {
       try {
-        const response = await fetch(
-          `http://3.80.235.113:8000/api/transaction/get-by-id/${transaction_id}`
-        );
-        const data = await response.json();
+        const transactionData = await fetchTransaction(transaction_id);
 
-        if (!data.success) {
-          toast.error(data.message);
+        if (!transactionData) {
+          toast.error("Failed to fetch transaction details!");
           return navigate("/");
         }
 
-        setTransactionDetails(data.data);
+        setTransactionDetails(transactionData);
 
-        // Simpan nilai asli (tanpa titik) dan format untuk tampilan
-        const amountValue = data.data.total_amount;
-        setAmountRaw(amountValue); // Simpan angka asli
-        setAmountFormatted(amountValue.toLocaleString("id-ID")); // Format untuk tampilan
+        const amountValue = transactionData.total_amount;
+        setAmountRaw(amountValue);
+        setAmountFormatted(amountValue.toLocaleString("id-ID"));
       } catch (err) {
         console.error(err);
         toast.error("Error fetching transaction details");
@@ -39,7 +35,7 @@ const Paying = () => {
     };
 
     fetchTransactionDetails();
-  }, [transaction_id, setTransactionDetails, navigate]);
+  }, [transaction_id, setTransactionDetails, navigate, fetchTransaction]);
 
   const handlePayment = async () => {
     try {
@@ -52,8 +48,6 @@ const Paying = () => {
 
       if (response && response.data) {
         const { items, success } = response.data;
-
-        console.log("Items from response:", items);
 
         if (success && Array.isArray(items) && items.length > 0) {
           toast.success("Payment successful!");
@@ -79,32 +73,40 @@ const Paying = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-semibold mb-4">Confirm Payment</h1>
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto sm:max-w-lg md:max-w-xl">
+      <h1 className="text-2xl font-semibold text-center mb-6">
+        Confirm Payment
+      </h1>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center">
+          <div className="animate-spin border-t-4 border-blue-500 border-solid w-8 h-8 rounded-full"></div>
+        </div>
       ) : (
         <>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Amount</label>
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Amount
+            </label>
             <input
               type="text"
-              value={amountFormatted} // Tampilkan angka terformat
-              readOnly
-              className="w-full p-2 border rounded"
+              value={amountFormatted}
+              disabled
+              className="w-full p-3 bg-gray-100 border rounded-md text-gray-700"
             />
           </div>
+
           <button
             onClick={handlePayment}
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+            disabled={isLoading}
           >
-            Confirm Payment
+            Pay Now
           </button>
-          {error && <p className="text-red-500 mt-2">{error}</p>}
         </>
+      )}
+      {error && (
+        <p className="text-red-600 text-center mt-4">{error.message}</p>
       )}
     </div>
   );
-};
-
-export default Paying;
+}
